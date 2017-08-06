@@ -38,10 +38,10 @@ public class WrapperForTrello {
 
 	public void creatCheckList(String cardId, String checkListname,WebDriver driverr) throws InterruptedException, ParseException{
 		
-			String checklistUrl="https://api.trello.com/1/checklists?idCard="+cardId+"&name="+checkListname+"&key="+APIKey+"&token="+acessToken+""; 
-	        Object cardResponse=post(checklistUrl,driverr);
-			JSONObject json = (JSONObject) new JSONParser().parse((String) cardResponse);
-	        currentCheckListId=(String)json.get("id");
+	  String checklistUrl="https://api.trello.com/1/checklists?idCard="+cardId+"&name="+checkListname+"&key="+APIKey+"&token="+acessToken+""; 
+	  Object cardResponse=post(checklistUrl,driverr);
+	  JSONObject json = (JSONObject) new JSONParser().parse((String) cardResponse);
+	  currentCheckListId=(String)json.get("id");
 		
 	}
 	
@@ -58,7 +58,6 @@ public class WrapperForTrello {
 		
 	
 	public Object post(String url, WebDriver dvr) throws InterruptedException, ParseException{
-		
 		
 		JavascriptExecutor js = (JavascriptExecutor)dvr;
 		dvr.manage().timeouts().setScriptTimeout(60, TimeUnit.SECONDS);
@@ -81,5 +80,27 @@ public class WrapperForTrello {
 		
 	}
 		
+	public Object get(String url, WebDriver dvr) throws InterruptedException, ParseException{
+		
+		JavascriptExecutor js = (JavascriptExecutor)dvr;
+		dvr.manage().timeouts().setScriptTimeout(60, TimeUnit.SECONDS);
+		Object response= js.executeAsyncScript("var data = JSON.stringify(false);"+
+				 "var callback = arguments[arguments.length - 1];" +
+                 "var xhr = new XMLHttpRequest();"+
+	             "xhr.withCredentials = false;"+ 
+	             "xhr.onreadystatechange = function() {" +
+	             "  if (xhr.readyState == 4) {" +
+	             "    callback(xhr.responseText);" +
+	             "  }" +
+	             "};" +
+          
+	              "xhr.open(\"GET\",\""+url+"\");"
+                + "xhr.send(data);");
+		
+		System.out.println("response :::"+response );
 	
+		return response;
+		
+	}
+		
 }
