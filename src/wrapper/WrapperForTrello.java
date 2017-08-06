@@ -26,18 +26,10 @@ public class WrapperForTrello {
 	}
 	
 	public void creatCard(String listId, String cardNmae,WebDriver driverr) throws InterruptedException, ParseException{
-		
-		System.out.println(1);
-		
+	
 		String cardUrl="https://api.trello.com/1/cards?name="+cardNmae+"&idList="+listId+"&key="+APIKey+"&token="+acessToken+""; 
-		
-		System.out.println(2);
-		
-		
 		Object cardResponse= post(cardUrl,driverr);
 		JSONObject json = (JSONObject) new JSONParser().parse((String) cardResponse);
-		System.out.println(6);
-		
 		currentCardId= (String)json.get("id");
 		System.out.println(7+currentCardId);
 		currentCardUrl=(String)json.get("url");
@@ -47,17 +39,14 @@ public class WrapperForTrello {
 	public void creatCheckList(String cardId, String checkListname,WebDriver driverr) throws InterruptedException, ParseException{
 		
 			String checklistUrl="https://api.trello.com/1/checklists?idCard="+cardId+"&name="+checkListname+"&key="+APIKey+"&token="+acessToken+""; 
-	       
-			Object cardResponse=post(checklistUrl,driverr);
-			
+	        Object cardResponse=post(checklistUrl,driverr);
 			JSONObject json = (JSONObject) new JSONParser().parse((String) cardResponse);
-	        
 	        currentCheckListId=(String)json.get("id");
 		
 	}
 	
 	
-		public void creatCheckListItem(String checklistId, String name,boolean checkornot, WebDriver driverr) throws InterruptedException, ParseException{
+	public void creatCheckListItem(String checklistId, String name,boolean checkornot, WebDriver driverr) throws InterruptedException, ParseException{
 		
 			String checklistItemUrl="https://api.trello.com/1/checklists/"+checklistId+"/checkItems?name="+name+"&checked="+checkornot+"&key="+APIKey+"&token="+acessToken+""; 
 			Object cardResponse= post(checklistItemUrl,driverr);
@@ -70,14 +59,11 @@ public class WrapperForTrello {
 	
 	public Object post(String url, WebDriver dvr) throws InterruptedException, ParseException{
 		
-		System.out.print(3);
-		JavascriptExecutor js = (JavascriptExecutor)dvr;
-		System.out.print(4);
-
-		dvr.manage().timeouts().setScriptTimeout(60, TimeUnit.SECONDS);
 		
+		JavascriptExecutor js = (JavascriptExecutor)dvr;
+		dvr.manage().timeouts().setScriptTimeout(60, TimeUnit.SECONDS);
 		Object response= js.executeAsyncScript("var data = JSON.stringify(false);"+
-				"var callback = arguments[arguments.length - 1];" +
+				 "var callback = arguments[arguments.length - 1];" +
                  "var xhr = new XMLHttpRequest();"+
 	             "xhr.withCredentials = false;"+ 
 	             "xhr.onreadystatechange = function() {" +
@@ -90,15 +76,10 @@ public class WrapperForTrello {
                 + "xhr.send(data);");
 		
 		System.out.println("response :::"+response );
-		
-		
-
-
+	
 		return response;
 		
 	}
-	
-	
-	
+		
 	
 }
