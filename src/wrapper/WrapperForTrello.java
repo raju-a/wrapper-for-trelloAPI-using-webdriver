@@ -25,9 +25,9 @@ public class WrapperForTrello {
 		System.out.print(acessToken);
 	}
 	
-	public void creatCard(String listId, String cardNmae,WebDriver driverr) throws InterruptedException, ParseException{
+	public void creatCard(String listId, String cardNmae,String description,WebDriver driverr) throws InterruptedException, ParseException{
 	
-		String cardUrl="https://api.trello.com/1/cards?name="+cardNmae+"&idList="+listId+"&key="+APIKey+"&token="+acessToken+""; 
+		String cardUrl="https://api.trello.com/1/cards?name="+cardNmae+"&desc="+description+"&idList="+listId+"&key="+APIKey+"&token="+acessToken+""; 
 		Object cardResponse= post(cardUrl,driverr);
 		JSONObject json = (JSONObject) new JSONParser().parse((String) cardResponse);
 		currentCardId= (String)json.get("id");
