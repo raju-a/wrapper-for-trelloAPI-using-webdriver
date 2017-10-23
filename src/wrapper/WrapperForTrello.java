@@ -10,52 +10,54 @@ import org.openqa.selenium.WebDriver;
 
 public class WrapperForTrello implements TrelloWrapper
 	{
-
+        static String trelloURL="https://api.trello.com";
 		String APIKey = "";
 		String acessToken = "";
 		String currentCardId = "";
 		String currentCardUrl = "";
 		String currentCheckListId = "";
-
+		
+		@Override
 		public void setApikeyAndAcessToken( String apiKey , String acessTkn )
 			{
-				System.out.print( apiKey );
-
+			
 				APIKey = apiKey;
 				acessToken = acessTkn;
-				System.out.print( acessToken );
+				
 			}
-
+		
+		@Override
 		public void creatCard( String listId , String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
 																											ParseException
 			{
 
-				String cardUrl = "https://api.trello.com/1/cards?name=" + cardNmae + "&desc=" + description + "&idList=" + listId + "&key=" + APIKey
+				String cardUrl = trelloURL+"/1/cards?name=" + cardNmae + "&desc=" + description + "&idList=" + listId + "&key=" + APIKey
 						+ "&token=" + acessToken + "";
 				Object cardResponse = post( cardUrl , driverr );
 				JSONObject json = (JSONObject) new JSONParser().parse( (String) cardResponse );
 				currentCardId = (String) json.get( "id" );
-				System.out.println( 7 + currentCardId );
 				currentCardUrl = (String) json.get( "url" );
-				System.out.println( 8 + currentCardUrl );
+				
 			}
-
+		
+		@Override
 		public void creatCheckList( String cardId , String checkListname , WebDriver driverr ) throws InterruptedException , ParseException
 			{
 
-				String checklistUrl = "https://api.trello.com/1/checklists?idCard=" + cardId + "&name=" + checkListname + "&key=" + APIKey
+				String checklistUrl = trelloURL+"/1/checklists?idCard=" + cardId + "&name=" + checkListname + "&key=" + APIKey
 						+ "&token=" + acessToken + "";
 				Object cardResponse = post( checklistUrl , driverr );
 				JSONObject json = (JSONObject) new JSONParser().parse( (String) cardResponse );
 				currentCheckListId = (String) json.get( "id" );
 
 			}
-
+		
+		@Override
 		public void creatCheckListItem( String checklistId , String name , boolean checkornot , WebDriver driverr )	throws InterruptedException ,
 																													ParseException
 			{
 
-				String checklistItemUrl = "https://api.trello.com/1/checklists/" + checklistId + "/checkItems?name=" + name + "&checked="
+				String checklistItemUrl = trelloURL+"/1/checklists/" + checklistId + "/checkItems?name=" + name + "&checked="
 						+ checkornot + "&key=" + APIKey + "&token=" + acessToken + "";
 				Object cardResponse = post( checklistItemUrl , driverr );
 				System.out.println( checklistItemUrl );
@@ -63,12 +65,13 @@ public class WrapperForTrello implements TrelloWrapper
 				currentCheckListId = (String) json.get( "id" );
 
 			}
-
+		
+		@Override
 		public void addMembers(  String cardId ,String name , WebDriver driverr ) throws InterruptedException , ParseException
 			{
 
 				String userId = getUserId( name , driverr );
-				String addMembers = "https://api.trello.com/1/cards/" + cardId + "/idMembers?value=" + userId + "&key=" + APIKey + "&token="
+				String addMembers = trelloURL+"/1/cards/" + cardId + "/idMembers?value=" + userId + "&key=" + APIKey + "&token="
 						+ acessToken + "";
 				Object cardResponse = post( addMembers , driverr );
 				System.out.println( addMembers );
@@ -77,7 +80,7 @@ public class WrapperForTrello implements TrelloWrapper
 		@Override
 		public void addComments( String cardId , String comment , WebDriver driverr ) throws InterruptedException , ParseException
 			{
-				String addComments = "https://api.trello.com/1/cards/" + cardId + "/actions/comments?text=" + comment + "&key=" + APIKey + "&token="
+				String addComments = trelloURL+"/1/cards/" + cardId + "/actions/comments?text=" + comment + "&key=" + APIKey + "&token="
 						+ acessToken + "";
 				Object cardResponse = post( addComments , driverr );
 			}
@@ -86,7 +89,7 @@ public class WrapperForTrello implements TrelloWrapper
 		public void addAttachements( String cardId , String name , String base64 , WebDriver driverr ){
 				// TODO Auto-generated method stub
 
-				String attachementURL = "https://api.trello.com/1/cards/" + cardId + "/attachments/";
+				String attachementURL = trelloURL+"/1/cards/" + cardId + "/attachments/";
 				JavascriptExecutor js = (JavascriptExecutor) driverr;
 				driverr.manage().timeouts().setScriptTimeout( 60 , TimeUnit.SECONDS );
 				js.executeScript( "window.b64Data=\"" + base64 + "\"" + ";" + "window.byteCharacters = atob(b64Data);"
@@ -107,7 +110,7 @@ public class WrapperForTrello implements TrelloWrapper
 						+ "formData.append(\"" + "token" + "\"" + "," + "\"" + acessToken + "\"" + ");" + "formData.append(\"" + "file\""
 						+ ", file);" + "formData.append(\"" + "name\"" + "," + "\"" + name + "\"" + ");" + "formData.append(\"" + "token" + "\""
 						+ "," + "\"" + acessToken + "\"" + ");" );
-				System.out.println( "try got it" );
+				
 
 				Object responsee = js.executeAsyncScript( "var data = JSON.stringify(false);" + "var callback = arguments[arguments.length - 1];"
 						+ "var xhr = new XMLHttpRequest();" + "xhr.withCredentials = false;" + "xhr.onreadystatechange = function() {"
@@ -120,7 +123,7 @@ public class WrapperForTrello implements TrelloWrapper
 		public String getUserId( String name , WebDriver driverr ) throws InterruptedException , ParseException
 			{
 
-				String getname = "https://api.trello.com/1/members/" + name;
+				String getname = trelloURL+"/1/members/" + name;
 				Object cardResponse = get( getname , driverr );
 				JSONObject json = (JSONObject) new JSONParser().parse( (String) cardResponse );
 				String id = (String) json.get( "id" );
@@ -141,7 +144,7 @@ public class WrapperForTrello implements TrelloWrapper
 
 						"xhr.open(\"POST\",\"" + url + "\");" + "xhr.send(data);" );
 
-				System.out.println( "response :::" + response );
+				
 
 				return response;
 
@@ -158,8 +161,7 @@ public class WrapperForTrello implements TrelloWrapper
 
 						"xhr.open(\"GET\",\"" + url + "\");" + "xhr.send(data);" );
 
-				System.out.println( "response :::" + response );
-
+				
 				return response;
 
 			}
