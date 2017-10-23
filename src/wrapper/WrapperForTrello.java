@@ -64,7 +64,7 @@ public class WrapperForTrello implements TrelloWrapper
 
 			}
 
-		public void addMembers( String name , String cardId , WebDriver driverr ) throws InterruptedException , ParseException
+		public void addMembers(  String cardId ,String name , WebDriver driverr ) throws InterruptedException , ParseException
 			{
 
 				String userId = getUserId( name , driverr );

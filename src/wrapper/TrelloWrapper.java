@@ -11,7 +11,7 @@ public interface TrelloWrapper
 		public void creatCard( String listId , String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
 																											ParseException;
 
-		public void addMembers( String name , String cardId , WebDriver driverr ) throws InterruptedException , ParseException;
+		public void addMembers(  String cardId ,String name , WebDriver driverr ) throws InterruptedException , ParseException;
 
 		public void creatCheckList( String cardId , String checkListname , WebDriver driverr ) throws InterruptedException , ParseException;
 
