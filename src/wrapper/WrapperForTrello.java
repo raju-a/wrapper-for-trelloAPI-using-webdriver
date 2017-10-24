@@ -25,7 +25,7 @@ public class WrapperForTrello implements TrelloWrapper
 			}
 		
 		@Override
-		public void creatCard( String listId , String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
+		public void createCard( String listId , String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
 																											ParseException
 			{
                 String cardUrl = trelloURL+"/1/cards?name=" + cardNmae + "&desc=" + description + "&idList=" + listId + "&key=" + APIKey
@@ -38,7 +38,7 @@ public class WrapperForTrello implements TrelloWrapper
 			}
 		
 		@Override
-		public void creatCheckList( String cardId , String checkListname , WebDriver driverr ) throws InterruptedException , ParseException
+		public void createCheckList( String cardId , String checkListname , WebDriver driverr ) throws InterruptedException , ParseException
 			{
 
 				String checklistUrl = trelloURL+"/1/checklists?idCard=" + cardId + "&name=" + checkListname + "&key=" + APIKey
@@ -50,7 +50,7 @@ public class WrapperForTrello implements TrelloWrapper
 			}
 		
 		@Override
-		public void creatCheckListItem( String checklistId , String name , boolean checkornot , WebDriver driverr )	throws InterruptedException ,
+		public void createCheckListItem( String checklistId , String name , boolean checkornot , WebDriver driverr )	throws InterruptedException ,
 																													ParseException
 			{
 
