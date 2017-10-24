@@ -20,6 +20,6 @@ public interface TrelloWrapper
         
 		public void addComments( String cardId , String comment , WebDriver driverr ) throws InterruptedException , ParseException;
 	    
-		public void addAttachements(String cardId, String name, String base64,WebDriver driverr );
+		public void addAttachments(String cardId, String name, String base64,WebDriver driverr );
 		
 	}

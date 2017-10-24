@@ -20,18 +20,15 @@ public class WrapperForTrello implements TrelloWrapper
 		@Override
 		public void setApikeyAndAcessToken( String apiKey , String acessTkn )
 			{
-			
 				APIKey = apiKey;
-				acessToken = acessTkn;
-				
+				acessToken = acessTkn;	
 			}
 		
 		@Override
 		public void creatCard( String listId , String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
 																											ParseException
 			{
-
-				String cardUrl = trelloURL+"/1/cards?name=" + cardNmae + "&desc=" + description + "&idList=" + listId + "&key=" + APIKey
+                String cardUrl = trelloURL+"/1/cards?name=" + cardNmae + "&desc=" + description + "&idList=" + listId + "&key=" + APIKey
 						+ "&token=" + acessToken + "";
 				Object cardResponse = post( cardUrl , driverr );
 				JSONObject json = (JSONObject) new JSONParser().parse( (String) cardResponse );
@@ -86,7 +83,7 @@ public class WrapperForTrello implements TrelloWrapper
 			}
 		
 		@Override
-		public void addAttachements( String cardId , String name , String base64 , WebDriver driverr ){
+		public void addAttachments( String cardId , String name , String base64 , WebDriver driverr ){
 				// TODO Auto-generated method stub
 
 				String attachementURL = trelloURL+"/1/cards/" + cardId + "/attachments/";
@@ -131,7 +128,7 @@ public class WrapperForTrello implements TrelloWrapper
 
 			}
 
-		// https://api.trello.com/1/cards/id/attachments
+		
 
 		public Object post( String url , WebDriver dvr ) throws InterruptedException , ParseException
 			{
@@ -143,8 +140,6 @@ public class WrapperForTrello implements TrelloWrapper
 						+ "  if (xhr.readyState == 4) {" + "    callback(xhr.responseText);" + "  }" + "};" +
 
 						"xhr.open(\"POST\",\"" + url + "\");" + "xhr.send(data);" );
-
-				
 
 				return response;
 
