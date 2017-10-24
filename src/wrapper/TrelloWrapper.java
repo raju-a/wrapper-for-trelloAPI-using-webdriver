@@ -11,15 +11,15 @@ public interface TrelloWrapper
 		public void createCard( String listId , String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
 																											ParseException;
 
-		public void addMembers(  String cardId ,String name , WebDriver driverr ) throws InterruptedException , ParseException;
+		public void addMembers( String cardId , String name , WebDriver driverr ) throws InterruptedException , ParseException;
 
 		public void createCheckList( String cardId , String checkListname , WebDriver driverr ) throws InterruptedException , ParseException;
 
-		public void createCheckListItem( String checklistId , String name , boolean checkornot , WebDriver driverr )	throws InterruptedException ,
+		public void createCheckListItem( String checklistId , String name , boolean checkornot , WebDriver driverr ) throws InterruptedException ,
 																													ParseException;
-        
+
 		public void addComments( String cardId , String comment , WebDriver driverr ) throws InterruptedException , ParseException;
-	    
-		public void addAttachments(String cardId, String name, String base64,WebDriver driverr );
-		
+
+		public void addAttachments( String cardId , String name , String base64 , WebDriver driverr );
+
 	}
