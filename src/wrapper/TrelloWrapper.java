@@ -8,7 +8,7 @@ public interface TrelloWrapper
 
 		public void setApikeyAndAcessToken( String apiKey , String acessTkn );
 
-		public void createCard( String listId , String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
+		public void createCard( String boardId ,String listName, String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
 																											ParseException;
 
 		public void addMembers( String cardId , String name , WebDriver driverr ) throws InterruptedException , ParseException;
