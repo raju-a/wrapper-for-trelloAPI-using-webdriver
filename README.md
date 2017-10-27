@@ -13,7 +13,7 @@
    | Name |Type | Description |
    | --- | --- | --- |
    | cardId | String | The ID of the card |
-   | name | String | The name of the attachment. Max length 256, For eg 'example.png' |
+   | name | String | The name of the attachment. Max length 256, For instance 'example.png' |
    | base64 | String | 3 OutputTypes provided by getScreenshotAs(In selenium) one of the types is base64.|
    | driverr | WebDriver | Show file differences that haven't been staged |
    
