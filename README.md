@@ -3,7 +3,7 @@
   
 ### Getting Started
    Add this files `TrelloWrapper.java` and `WrapperForTrello.java`to your project. You need API key and oauth token. You can 
-   get your API key at: `https://trello.com/app-key`. And you need trello boardID, Which you can get from `trello.com/b/boardID/my-board-name`
+   get your API key at: `https://trello.com/app-key`. And you need trello boardID, Board which you are going to create card,      you can get that from your app, for instance `trello.com/b/boardID/my-board-name`
    
    
 ### Add attachments to your card 
