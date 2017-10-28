@@ -8,8 +8,8 @@ public interface TrelloWrapper
 
 		public void setApikeyAndAcessToken( String apiKey , String acessTkn );
 
-		public void createCard( String boardId ,String listName, String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
-																											ParseException;
+		public void createCard( String boardId , String listName , String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
+																																ParseException;
 
 		public void addMembers( String cardId , String name , WebDriver driverr ) throws InterruptedException , ParseException;
 
@@ -21,5 +21,7 @@ public interface TrelloWrapper
 		public void addComments( String cardId , String comment , WebDriver driverr ) throws InterruptedException , ParseException;
 
 		public void addAttachments( String cardId , String name , String base64 , WebDriver driverr );
+
+		public void archive( String boardId , String listName , String cardName , WebDriver driverr ) throws InterruptedException, ParseException;
 
 	}

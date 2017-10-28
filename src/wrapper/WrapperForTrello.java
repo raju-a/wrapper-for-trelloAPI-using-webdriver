@@ -117,6 +117,33 @@ public class WrapperForTrello implements TrelloWrapper
 						"xhr.open(\"POST\",\"" + attachementURL + "\");" + "xhr.send(formData);" );
 
 			}
+		
+		@Override
+		public void archive( String boardId, String listName , String cardName , WebDriver driverr ) throws InterruptedException, ParseException
+			{
+				// TODO Auto-generated method stub
+				String cardId =null;
+				String listId=getListIdWithName(boardId,listName,driverr);
+				String getCardsURL="https://api.trello.com/1/lists/"+listId+"/cards?key=" + APIKey + "&token=" + acessToken + "";
+				Object cardResponse = get( getCardsURL , driverr );
+				JSONArray cardsArray = (JSONArray) new JSONParser().parse( (String) cardResponse );
+				for ( int i = 0 ; i < cardsArray.size() ; i++ )
+					{
+
+						JSONObject listObject = (JSONObject) cardsArray.get( i );
+						String cardsName = (String) listObject.get( "name" );
+						if ( cardName.trim().equalsIgnoreCase( cardsName.trim() ) )
+							{
+								cardId = (String) listObject.get( "id" );
+                                break; 
+							}
+
+					}
+				
+					String deleteURL="https://api.trello.com/1/cards/"+cardId;
+					delete(deleteURL,driverr);
+					
+			}
 
 		public String getListIdWithName(  String boardId ,String name , WebDriver driverr ) throws InterruptedException , ParseException
 			{
@@ -134,7 +161,7 @@ public class WrapperForTrello implements TrelloWrapper
 						if ( listName.trim().equalsIgnoreCase( name.trim() ) )
 							{
 								id = (String) listObject.get( "id" );
-
+								break; 
 							}
 
 					}
@@ -190,5 +217,21 @@ public class WrapperForTrello implements TrelloWrapper
 				return response;
 
 			}
+		
+		public Object delete( String url , WebDriver dvr ) throws InterruptedException , ParseException
+		{
+
+			JavascriptExecutor js = (JavascriptExecutor) dvr;
+			dvr.manage().timeouts().setScriptTimeout( 60 , TimeUnit.SECONDS );
+			Object response = js.executeAsyncScript( "var data = JSON.stringify(false);" + "var callback = arguments[arguments.length - 1];"
+					+ "var xhr = new XMLHttpRequest();" + "xhr.withCredentials = false;" + "xhr.onreadystatechange = function() {"
+					+ "  if (xhr.readyState == 4) {" + "    callback(xhr.responseText);" + "  }" + "};" +
+
+					"xhr.open(\"DELETE\",\"" + url + "\");" + "xhr.send(data);" );
+
+			return response;
+
+		}
+		
 
 	}
