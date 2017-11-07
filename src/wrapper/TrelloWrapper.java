@@ -1,5 +1,7 @@
 package wrapper;
 
+import java.util.ArrayList;
+
 import org.json.simple.parser.ParseException;
 import org.openqa.selenium.WebDriver;
 
@@ -24,4 +26,5 @@ public interface TrelloWrapper
 
 		public void archive( String boardId , String listName , String cardName , WebDriver driverr ) throws InterruptedException, ParseException;
 
+		public ArrayList<String> getCheckListItem(String boardId , String listName , String cardName , String checkListName, WebDriver driverr) throws InterruptedException, ParseException;
 	}

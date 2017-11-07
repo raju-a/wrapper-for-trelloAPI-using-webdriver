@@ -1,5 +1,6 @@
 package wrapper;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONArray;
@@ -26,10 +27,10 @@ public class WrapperForTrello implements TrelloWrapper
 			}
 
 		@Override
-		public void createCard( String boardId ,String listName, String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
-																											ParseException
+		public void createCard( String boardId , String listName , String cardNmae , String description , WebDriver driverr )	throws InterruptedException ,
+																																ParseException
 			{
-				String listId= getListIdWithName(boardId,listName,driverr);
+				String listId = getListIdWithName( boardId , listName , driverr );
 				String cardUrl = trelloURL + "/1/cards?name=" + cardNmae + "&desc=" + description + "&idList=" + listId + "&key=" + APIKey
 						+ "&token=" + acessToken + "";
 				Object cardResponse = post( cardUrl , driverr );
@@ -117,14 +118,24 @@ public class WrapperForTrello implements TrelloWrapper
 						"xhr.open(\"POST\",\"" + attachementURL + "\");" + "xhr.send(formData);" );
 
 			}
-		
+
 		@Override
-		public void archive( String boardId, String listName , String cardName , WebDriver driverr ) throws InterruptedException, ParseException
+		public void archive( String boardId , String listName , String cardName , WebDriver driverr ) throws InterruptedException , ParseException
 			{
 				// TODO Auto-generated method stub
-				String cardId =null;
-				String listId=getListIdWithName(boardId,listName,driverr);
-				String getCardsURL="https://api.trello.com/1/lists/"+listId+"/cards?key=" + APIKey + "&token=" + acessToken + "";
+				String cardId = getCardIdWithName( boardId , listName , cardName , driverr );
+				String deleteURL = "https://api.trello.com/1/cards/" + cardId;
+				delete( deleteURL , driverr );
+
+			}
+
+		public String getCardIdWithName( String boardId , String listName , String cardName , WebDriver driverr )	throws InterruptedException ,
+																													ParseException
+			{
+
+				String cardId = null;
+				String listId = getListIdWithName( boardId , listName , driverr );
+				String getCardsURL = "https://api.trello.com/1/lists/" + listId + "/cards?key=" + APIKey + "&token=" + acessToken + "";
 				Object cardResponse = get( getCardsURL , driverr );
 				JSONArray cardsArray = (JSONArray) new JSONParser().parse( (String) cardResponse );
 				for ( int i = 0 ; i < cardsArray.size() ; i++ )
@@ -135,17 +146,15 @@ public class WrapperForTrello implements TrelloWrapper
 						if ( cardName.trim().equalsIgnoreCase( cardsName.trim() ) )
 							{
 								cardId = (String) listObject.get( "id" );
-                                break; 
+								break;
 							}
 
 					}
-				
-					String deleteURL="https://api.trello.com/1/cards/"+cardId;
-					delete(deleteURL,driverr);
-					
+				return cardId;
+
 			}
 
-		public String getListIdWithName(  String boardId ,String name , WebDriver driverr ) throws InterruptedException , ParseException
+		public String getListIdWithName( String boardId , String name , WebDriver driverr ) throws InterruptedException , ParseException
 			{
 
 				String id = "";
@@ -161,7 +170,7 @@ public class WrapperForTrello implements TrelloWrapper
 						if ( listName.trim().equalsIgnoreCase( name.trim() ) )
 							{
 								id = (String) listObject.get( "id" );
-								break; 
+								break;
 							}
 
 					}
@@ -217,21 +226,60 @@ public class WrapperForTrello implements TrelloWrapper
 				return response;
 
 			}
-		
+
 		public Object delete( String url , WebDriver dvr ) throws InterruptedException , ParseException
-		{
+			{
 
-			JavascriptExecutor js = (JavascriptExecutor) dvr;
-			dvr.manage().timeouts().setScriptTimeout( 60 , TimeUnit.SECONDS );
-			Object response = js.executeAsyncScript( "var data = JSON.stringify(false);" + "var callback = arguments[arguments.length - 1];"
-					+ "var xhr = new XMLHttpRequest();" + "xhr.withCredentials = false;" + "xhr.onreadystatechange = function() {"
-					+ "  if (xhr.readyState == 4) {" + "    callback(xhr.responseText);" + "  }" + "};" +
+				JavascriptExecutor js = (JavascriptExecutor) dvr;
+				dvr.manage().timeouts().setScriptTimeout( 60 , TimeUnit.SECONDS );
+				Object response = js.executeAsyncScript( "var data = JSON.stringify(false);" + "var callback = arguments[arguments.length - 1];"
+						+ "var xhr = new XMLHttpRequest();" + "xhr.withCredentials = false;" + "xhr.onreadystatechange = function() {"
+						+ "  if (xhr.readyState == 4) {" + "    callback(xhr.responseText);" + "  }" + "};" +
 
-					"xhr.open(\"DELETE\",\"" + url + "\");" + "xhr.send(data);" );
+						"xhr.open(\"DELETE\",\"" + url + "\");" + "xhr.send(data);" );
 
-			return response;
+				return response;
 
-		}
-		
+			}
+
+		@Override
+		public ArrayList <String> getCheckListItem( String boardId , String listName , String cardName , String checkListName , WebDriver driverr )	throws InterruptedException ,
+																																					ParseException
+			{
+
+				JSONArray checkListItemsArray = null;
+				ArrayList <String> allCheckListItem = new ArrayList <String>();
+				String cardId = getCardIdWithName( boardId , listName , cardName , driverr );
+
+				String checkListsURL = "https://api.trello.com/1/cards/" + cardId + "/checklists?key=" + APIKey + "&token=" + acessToken + "";
+				Object cardResponse = get( checkListsURL , driverr );
+				JSONArray checkListArray = (JSONArray) new JSONParser().parse( (String) cardResponse );
+				for ( int i = 0 ; i < checkListArray.size() ; i++ )
+					{
+
+						JSONObject listObject = (JSONObject) checkListArray.get( i );
+						String checkListsName = (String) listObject.get( "name" );
+
+						if ( checkListName.trim().equalsIgnoreCase( checkListsName.trim() ) )
+							{
+
+								checkListItemsArray = (JSONArray) listObject.get( "checkItems" );
+
+								break;
+							}
+
+					}
+
+				for ( int i = 0 ; i < checkListItemsArray.size() ; i++ )
+					{
+
+						JSONObject listObject = (JSONObject) checkListItemsArray.get( i );
+						allCheckListItem.add( (String) listObject.get( "name" ) );
+
+					}
+
+				return allCheckListItem;
+
+			}
 
 	}
